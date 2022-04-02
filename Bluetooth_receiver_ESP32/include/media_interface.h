@@ -17,6 +17,9 @@ typedef enum {
     MEDIA_RANDOM,
     MEDIA_UNKNOWN_COMMAND,
     MEDIA_NO_COMMAND,
+
+    MEDIA_INFO_MELBUS_INIT_BEGIN,
+    MEDIA_INFO_MELBUS_INIT_DONE,
 } MEDIA_Command_e;
 
 class MediaInterface {

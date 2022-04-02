@@ -21,6 +21,7 @@ void setup() {
 
     Serial.printf("Setting up control\n");
     f_control.SetSink(&f_bluetoothSink);
+    f_control.SetDebug(true);
 
     Serial.printf("Starting bluetooth sink\n");
 

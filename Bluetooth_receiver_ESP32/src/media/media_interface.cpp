@@ -22,6 +22,11 @@
 #define COM_PREV    (uint8_t)(0x04)
 #define COM_RANDOM  (uint8_t)(0x05)
 
+#define COM_INFO_HEADER     (uint8_t)(0xB0)
+#define COM_INFO_UNKNOWN    (uint8_t)(0x00)
+#define COM_INFO_INIT_BEGIN (uint8_t)(0x01)
+#define COM_INFO_INIT_DONE  (uint8_t)(0x02)
+
 static MEDIA_Command_e TryDecodeCommand(const uint8_t byte);
 
 MediaInterface::MediaInterface()
@@ -79,6 +84,26 @@ MEDIA_Command_e TryDecodeCommand(const uint8_t byte)
             break;
         }
     }
+    else if (checkByte == COM_INFO_HEADER)
+    {
+        const uint8_t commandByte = byte & 0x0F;
+        switch (commandByte)
+        {
+        case COM_INFO_UNKNOWN:
+            command = MEDIA_UNKNOWN_COMMAND;
+            break;
+        case COM_INFO_INIT_BEGIN:
+            command = MEDIA_INFO_MELBUS_INIT_BEGIN;
+            break;
+        case COM_INFO_INIT_DONE:
+            command = MEDIA_INFO_MELBUS_INIT_DONE;
+            break;
+        
+        default:
+            command = MEDIA_UNKNOWN_COMMAND;
+            break;
+        }
+    }
     else
     {
         command = MEDIA_NO_COMMAND;
@@ -105,6 +130,15 @@ void MediaInterface::SerialPrintCommand(MEDIA_Command_e command)
         break;
     case MEDIA_RANDOM:
         Serial.println("Mcmd: Random");
+        break;
+    case MEDIA_UNKNOWN_COMMAND:
+        Serial.println("Mcmd: Unknown");
+        break;
+    case MEDIA_INFO_MELBUS_INIT_BEGIN:
+        Serial.println("Minfo: MELBUS init begin");
+        break;
+    case MEDIA_INFO_MELBUS_INIT_DONE:
+        Serial.println("Minfo: MELBUS init done");
         break;
     default:
         break;

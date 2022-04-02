@@ -17,11 +17,17 @@ typedef enum {
     MEDIA_RANDOM,
 } MEDIA_Command_e;
 
+typedef enum {
+    MEDIA_INFO_INIT_BEGIN,
+    MEDIA_INFO_INIT_DONE,
+} MEDIA_Info_e;
+
 class MediaInterface {
 public:
     MediaInterface();
     ~MediaInterface();
 
+    void SendInfoMessage(const MEDIA_Info_e info);
     void SendCommand(const MEDIA_Command_e command);
     void SetDebugPrint(const bool set);
 
