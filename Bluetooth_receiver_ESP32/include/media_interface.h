@@ -25,6 +25,7 @@ public:
     ~MediaInterface();
 
     MEDIA_Command_e TryGetCommand();
+    void SerialPrintCommand(MEDIA_Command_e command);
 
 private:
 };

@@ -44,13 +44,11 @@ void CD_CHANGER_Task()
             case MELBUS_MAIN_INIT:
                 f_initBegin = true;
                 f_initDone = false;
-                Serial.print("MB: Main init\n");
                 break;
 
             case MELBUS_SECONDARY_INIT:
                 f_initBegin = true;
                 f_initDone = false;
-                Serial.print("MB: Second init\n");
                 break;
 
             case MELBUS_CDCHGR_ID_REQ:
@@ -114,7 +112,6 @@ void CD_CHANGER_Task()
                 break;
 
             case MELBUS_FAST_FORWARD:
-                Serial.println("ff");
                 break;
 
             case MELBUS_UNKNOWN_COMMAND:
@@ -125,7 +122,6 @@ void CD_CHANGER_Task()
 
     if(!MELBUS_ConfirmSync())
     {
-        Serial.print("MB: Not in sync\n");
     }
 }
 

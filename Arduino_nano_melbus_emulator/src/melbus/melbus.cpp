@@ -29,13 +29,8 @@ bool MELBUS_Init()
     f_rxByte = 0x00;
 
     pinMode(MELBUS_CLK_PIN, INPUT_PULLUP);
-    // digitalWrite(MELBUS_CLK_PIN, HIGH);
-
     pinMode(MELBUS_BUSY_PIN, INPUT_PULLUP);
-    // digitalWrite(MELBUS_BUSY_PIN, HIGH);
-
     pinMode(MELBUS_DATA_PIN, INPUT_PULLUP);
-    // digitalWrite(MELBUS_DATA_PIN, HIGH);
 
     attachInterrupt(digitalPinToInterrupt(MELBUS_CLK_PIN), MelbusRxInterrupt, RISING);
     return true;

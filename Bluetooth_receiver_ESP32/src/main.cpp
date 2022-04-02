@@ -23,6 +23,6 @@ void loop() {
     MEDIA_Command_e mediaCommand = f_interface.TryGetCommand();
     if (mediaCommand != MEDIA_NO_COMMAND)
     {
-        Serial.printf("Command Received: %i", (uint8_t)(mediaCommand));
+        f_interface.SerialPrintCommand(mediaCommand);
     }
 }

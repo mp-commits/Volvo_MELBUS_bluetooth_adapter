@@ -40,8 +40,7 @@ MEDIA_Command_e MediaInterface::TryGetCommand()
 
     if (Serial.available() > 0)
     {
-        uint8_t readByte;
-        Serial.readBytes(&readByte, 1);
+        uint8_t readByte = Serial.read();
         command = TryDecodeCommand(readByte);
     }
 
@@ -86,4 +85,28 @@ MEDIA_Command_e TryDecodeCommand(const uint8_t byte)
     }
 
     return command;
+}
+
+void MediaInterface::SerialPrintCommand(MEDIA_Command_e command)
+{
+    switch (command)
+    {
+    case MEDIA_PLAY:
+        Serial.println("Mcmd: Play");
+        break;
+    case MEDIA_PAUSE:
+        Serial.println("Mcmd: Pause");
+        break;
+    case MEDIA_NEXT_TRACK:
+        Serial.println("Mcmd: Next");
+        break;
+    case MEDIA_PREVIOUS_TRACK:
+        Serial.println("Mcmd: Prev");
+        break;
+    case MEDIA_RANDOM:
+        Serial.println("Mcmd: Random");
+        break;
+    default:
+        break;
+    }
 }

@@ -1,14 +1,45 @@
 #include <Arduino.h>
 #include "cd_changer.h"
 
+#define LED_BLINK_COUNT 60000
+#define LED_PIN 13
+
+static uint32_t f_ledCounter;
+static bool f_ledOn;
+
+static void ToggleLed();
+
 void setup() {
-    // put your setup code here, to run once:
+    f_ledOn = true;
+    f_ledCounter = 0;
+    pinMode(LED_PIN, OUTPUT);
+    digitalWrite(LED_PIN, HIGH);
+
     Serial.begin(115200);
-    Serial.println("Init");
     CD_CHANGER_Init();
 }
 
 void loop() {
-    // put your main code here, to run repeatedly:
     CD_CHANGER_Task();
+
+    f_ledCounter++;
+    if (f_ledCounter > LED_BLINK_COUNT)
+    {
+        f_ledCounter = 0;
+        ToggleLed();
+    }
+}
+
+void ToggleLed()
+{
+    if (f_ledOn)
+    {
+        digitalWrite(LED_PIN, LOW);
+        f_ledOn = false;
+    }
+    else
+    {
+        digitalWrite(LED_PIN, HIGH);
+        f_ledOn = true;
+    }
 }

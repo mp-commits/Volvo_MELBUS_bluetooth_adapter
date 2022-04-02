@@ -39,11 +39,12 @@ void MediaInterface::SendCommand(const MEDIA_Command_e command)
 {
     if (m_debugMode)
     {
-        Serial.println(EncodeDebugCommand(command));
+        Serial.println(EncodeDebugCommand(command), HEX);
     }
     else
     {
         Serial.write(EncodeCommand(command));
+        // Serial.print(EncodeCommand(command));
     }
 }
 
@@ -77,7 +78,7 @@ uint8_t EncodeCommand(MEDIA_Command_e cmd)
         break;
     }
 
-    commandByte = commandByte & COM_HEADER;
+    commandByte = commandByte | COM_HEADER;
 
     return commandByte;
 }
