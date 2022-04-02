@@ -12,6 +12,7 @@
 #include "melbus.h"
 #include "tools/history.h"
 #include "cd_changer.h"
+#include "media_interface.h"
 #include <Arduino.h>
 
 static uint8_t f_cdNumber = 1;
@@ -26,6 +27,7 @@ static bool f_initBegin;
 static bool f_initDone;
 
 static ByteHistory f_history;
+static MediaInterface f_mediaInterface;
 
 static MELBUS_command_t TryResolveCommand();
 static void FixTrackNumber();
@@ -77,20 +79,24 @@ void CD_CHANGER_Task()
                 f_trackInfo[1] = 0x08;
                 f_trackInfo[8] = 0x08;
                 MELBUS_SendByte(0x00);
+                f_mediaInterface.SendCommand(MEDIA_PLAY);
                 break;
 
             case MELBUS_POWER_DOWN:
                 f_trackInfo[1] = 0x02;
                 f_trackInfo[8] = 0x02;
                 MELBUS_SendByte(0x00);
+                f_mediaInterface.SendCommand(MEDIA_PAUSE);
                 break;
 
             case MELBUS_TRACK_NEXT:
                 f_trackNumber++;
+                f_mediaInterface.SendCommand(MEDIA_NEXT_TRACK);
                 break;
 
             case MELBUS_TRACK_PREVIOUS:
                 f_trackNumber--;
+                f_mediaInterface.SendCommand(MEDIA_PREVIOUS_TRACK);
                 break;
 
             case MELBUS_DISC_NEXT:
@@ -104,9 +110,11 @@ void CD_CHANGER_Task()
                 break;
 
             case MELBUS_RANDOM:
+                f_mediaInterface.SendCommand(MEDIA_RANDOM);
                 break;
 
             case MELBUS_FAST_FORWARD:
+                Serial.println("ff");
                 break;
 
             case MELBUS_UNKNOWN_COMMAND:
