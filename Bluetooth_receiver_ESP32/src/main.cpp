@@ -2,8 +2,9 @@
 #include <project_pinconfig.h>
 #include "BluetoothA2DPSink.h"
 #include "media_control.h"
+#include "melbus_controller.h"
 
-#define PROJECT_SOFTWARE_VERSION "proto-0.1"
+#define PROJECT_SOFTWARE_VERSION "proto-0.5"
 
 BluetoothA2DPSink f_bluetoothSink;
 MediaControl f_control;
@@ -13,11 +14,9 @@ void setup() {
     Serial.printf("Begin init bt receiver ver: %s\n", PROJECT_SOFTWARE_VERSION);
     Serial.printf("Resetting arduino\n");
 
-    pinMode(ARDUIONO_RESET_PIN, OUTPUT);
-    digitalWrite(ARDUIONO_RESET_PIN, LOW);
-    delay(500);
-    digitalWrite(ARDUIONO_RESET_PIN, HIGH);
-    delay(3000);
+    MELBUSCONTROL_Init();
+    delay(100);
+    MELBUSCONTROL_SetEnable(true);
 
     Serial.printf("Setting up control\n");
     f_control.SetSink(&f_bluetoothSink);
