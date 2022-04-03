@@ -26,6 +26,7 @@
 #define COM_INFO_UNKNOWN    (uint8_t)(0x00)
 #define COM_INFO_INIT_BEGIN (uint8_t)(0x01)
 #define COM_INFO_INIT_DONE  (uint8_t)(0x02)
+#define COM_INFO_ALIVE      (uint8_t)(0x03)
 
 static MEDIA_Command_e TryDecodeCommand(const uint8_t byte);
 
@@ -98,7 +99,10 @@ MEDIA_Command_e TryDecodeCommand(const uint8_t byte)
         case COM_INFO_INIT_DONE:
             command = MEDIA_INFO_MELBUS_INIT_DONE;
             break;
-        
+        case COM_INFO_ALIVE:
+            command = MEDIA_INFO_ALIVE;
+            break;
+
         default:
             command = MEDIA_UNKNOWN_COMMAND;
             break;
@@ -140,6 +144,9 @@ void MediaInterface::SerialPrintCommand(MEDIA_Command_e command)
     case MEDIA_INFO_MELBUS_INIT_DONE:
         Serial.println("Minfo: MELBUS init done");
         break;
+    case MEDIA_INFO_ALIVE:
+        static uint32_t aliveCounter = 0;
+        Serial.printf("Minfo: MELBUS alive, %i\n", aliveCounter++);
     default:
         break;
     }

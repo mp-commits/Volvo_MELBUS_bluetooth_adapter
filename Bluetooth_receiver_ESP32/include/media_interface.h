@@ -20,6 +20,7 @@ typedef enum {
 
     MEDIA_INFO_MELBUS_INIT_BEGIN,
     MEDIA_INFO_MELBUS_INIT_DONE,
+    MEDIA_INFO_ALIVE,
 } MEDIA_Command_e;
 
 class MediaInterface {

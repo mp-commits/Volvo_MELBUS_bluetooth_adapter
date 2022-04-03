@@ -20,6 +20,7 @@ typedef enum {
 typedef enum {
     MEDIA_INFO_INIT_BEGIN,
     MEDIA_INFO_INIT_DONE,
+    MEDIA_INFO_ALIVE
 } MEDIA_Info_e;
 
 class MediaInterface {

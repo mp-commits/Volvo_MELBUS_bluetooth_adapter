@@ -26,6 +26,7 @@
 #define COM_INFO_UNKNOWN    (uint8_t)(0x00)
 #define COM_INFO_INIT_BEGIN (uint8_t)(0x01)
 #define COM_INFO_INIT_DONE  (uint8_t)(0x02)
+#define COM_INFO_ALIVE      (uint8_t)(0x03)
 
 static uint8_t EncodeInfoMessage(MEDIA_Info_e msg);
 static uint8_t EncodeCommand(MEDIA_Command_e cmd);
@@ -142,6 +143,9 @@ uint8_t EncodeInfoMessage(MEDIA_Info_e msg)
         break;
     case MEDIA_INFO_INIT_DONE:
         infoByte = COM_INFO_INIT_DONE;
+        break;
+    case MEDIA_INFO_ALIVE:
+        infoByte = COM_INFO_ALIVE;
         break;
 
     default:

@@ -10,10 +10,22 @@
  */
 
 #include "project_pinconfig.h"
+#include "media_control.h"
 #include "Arduino.h"
 
-extern void MELBUSCONTROL_Init();
+#define MELBUS_INIT_TIMEOUT_MS 15000 // Allow 10 sec for melbus init before reset
 
-extern void MELBUSCONTROL_Reset();
+class MelbusController
+{
+public:
+    MelbusController(MediaControl* control);
+    ~MelbusController();
+    void Init();
+    void Reset();
+    void SetEnable(bool enable);
 
-extern void MELBUSCONTROL_SetEnable(bool enable);
+    void Task();
+private:
+    MediaControl* m_mediaControl;
+    uint32_t m_initBeginTime_ms;
+};
