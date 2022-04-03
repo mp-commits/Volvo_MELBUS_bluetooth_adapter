@@ -14,19 +14,22 @@
 #include <stdint.h>
 
 // Bytes for decoding commands
-#define COM_HEADER  (uint8_t)(0xA0)
-#define COM_UNKNOWN (uint8_t)(0x00)
-#define COM_PLAY    (uint8_t)(0x01)
-#define COM_PAUSE   (uint8_t)(0x02)
-#define COM_NEXT    (uint8_t)(0x03)
-#define COM_PREV    (uint8_t)(0x04)
-#define COM_RANDOM  (uint8_t)(0x05)
+#define COM_HEADER   (uint8_t)(0xA0)
+#define COM_UNKNOWN  (uint8_t)(0x00)
+#define COM_PLAY     (uint8_t)(0x01)
+#define COM_PAUSE    (uint8_t)(0x02)
+#define COM_NEXT     (uint8_t)(0x03)
+#define COM_PREV     (uint8_t)(0x04)
+#define COM_RANDOM   (uint8_t)(0x05)
+#define COM_VOL_UP   (uint8_t)(0x06)
+#define COM_VOL_DOWN (uint8_t)(0x07)
 
 #define COM_INFO_HEADER     (uint8_t)(0xB0)
 #define COM_INFO_UNKNOWN    (uint8_t)(0x00)
 #define COM_INFO_INIT_BEGIN (uint8_t)(0x01)
 #define COM_INFO_INIT_DONE  (uint8_t)(0x02)
 #define COM_INFO_ALIVE      (uint8_t)(0x03)
+
 
 static MEDIA_Command_e TryDecodeCommand(const uint8_t byte);
 
@@ -80,6 +83,13 @@ MEDIA_Command_e TryDecodeCommand(const uint8_t byte)
             break;
         case COM_RANDOM:
             command = MEDIA_RANDOM;
+            break;
+        case COM_VOL_UP:
+            command = MEDIA_VOLUME_UP;
+            break;
+        case COM_VOL_DOWN:
+            command = MEDIA_VOLUME_DOWN;
+            break;
         default:
             command = MEDIA_UNKNOWN_COMMAND;
             break;
@@ -134,6 +144,12 @@ void MediaInterface::SerialPrintCommand(MEDIA_Command_e command)
         break;
     case MEDIA_RANDOM:
         Serial.println("Mcmd: Random");
+        break;
+    case MEDIA_VOLUME_UP:
+        Serial.println("Mcmd: vol+");
+        break;
+    case MEDIA_VOLUME_DOWN:
+        Serial.println("Mcmd: vol-");
         break;
     case MEDIA_UNKNOWN_COMMAND:
         Serial.println("Mcmd: Unknown");

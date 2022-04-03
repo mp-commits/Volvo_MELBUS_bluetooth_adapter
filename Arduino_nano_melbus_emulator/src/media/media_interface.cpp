@@ -14,13 +14,15 @@
 #include <stdint.h>
 
 // Bytes for encoding commands
-#define COM_HEADER  (uint8_t)(0xA0)
-#define COM_UNKNOWN (uint8_t)(0x00)
-#define COM_PLAY    (uint8_t)(0x01)
-#define COM_PAUSE   (uint8_t)(0x02)
-#define COM_NEXT    (uint8_t)(0x03)
-#define COM_PREV    (uint8_t)(0x04)
-#define COM_RANDOM  (uint8_t)(0x05)
+#define COM_HEADER   (uint8_t)(0xA0)
+#define COM_UNKNOWN  (uint8_t)(0x00)
+#define COM_PLAY     (uint8_t)(0x01)
+#define COM_PAUSE    (uint8_t)(0x02)
+#define COM_NEXT     (uint8_t)(0x03)
+#define COM_PREV     (uint8_t)(0x04)
+#define COM_RANDOM   (uint8_t)(0x05)
+#define COM_VOL_UP   (uint8_t)(0x06)
+#define COM_VOL_DOWN (uint8_t)(0x07)
 
 #define COM_INFO_HEADER     (uint8_t)(0xB0)
 #define COM_INFO_UNKNOWN    (uint8_t)(0x00)
@@ -94,6 +96,12 @@ uint8_t EncodeCommand(MEDIA_Command_e cmd)
         break;
     case MEDIA_RANDOM:
         commandByte = COM_RANDOM;
+        break;
+    case MEDIA_VOLUME_UP:
+        commandByte = COM_VOL_UP;
+        break;
+    case MEDIA_VOLUME_DOWN:
+        commandByte = COM_VOL_DOWN;
         break;
     default:
         break;
