@@ -9,6 +9,9 @@
  * 
  */
 
+#ifndef MEDIA_INTERFACE_H
+#define MEDIA_INTERFACE_H
+
 typedef enum {
     MEDIA_PLAY,
     MEDIA_PAUSE,
@@ -37,3 +40,5 @@ public:
 private:
     bool m_debugMode;
 };
+
+#endif

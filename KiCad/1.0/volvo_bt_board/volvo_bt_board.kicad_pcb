@@ -955,6 +955,8 @@
     )
   )
 
+  (gr_rect (start 71.755 41.275) (end 206.375 140.97) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 44334397-682f-4f0a-8a10-bde4f0c3e121))
+
   (segment locked (start 162.56 83.82) (end 180.34 83.82) (width 1) (layer "F.Cu") (net 48) (tstamp 0c8e6c6d-8665-473c-8d2b-ac8bc9be4592))
   (segment locked (start 180.34 83.82) (end 195.58 83.82) (width 1) (layer "F.Cu") (net 48) (tstamp 306aa73e-9e48-4463-bebd-331509cf6788))
   (segment locked (start 170.18 93.98) (end 180.34 83.82) (width 1) (layer "F.Cu") (net 48) (tstamp 41b1a252-944c-4d16-959d-bf526f0c8caf))

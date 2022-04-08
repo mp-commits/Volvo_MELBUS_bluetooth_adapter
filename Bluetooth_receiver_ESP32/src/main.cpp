@@ -2,8 +2,11 @@
 #include <project_pinconfig.h>
 #include "BluetoothA2DPSink.h"
 #include "melbus_controller.h"
+#include "media_control.h"
 
-#define PROJECT_SOFTWARE_VERSION "proto-0.5"
+#define PROJECT_SOFTWARE_VERSION "release-1.0"
+#define BEGIN_WAIT_TIME_MS 3000
+
 
 BluetoothA2DPSink f_bluetoothSink;
 MediaControl f_mediaControl;
@@ -17,7 +20,7 @@ void setup() {
     Serial.printf("Enabling arduino\n");
 
     f_melbusController.Init();
-    delay(100);
+    delay(BEGIN_WAIT_TIME_MS);
     f_melbusController.SetEnable(true);
 
     Serial.printf("Setting up control\n");

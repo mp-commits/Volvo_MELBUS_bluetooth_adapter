@@ -9,8 +9,13 @@
  * 
  */
 
-#define ENABLE_TIMEOUT_MS 5000
+#ifndef ENABLE_H
+#define ENABLE_H
+
+#define ENABLE_TIMEOUT_MS 10000
 #define ENABLE_PIN 5
 
 extern void ENABLE_Init();
 extern void ENABLE_WaitForEnable();
+
+#endif

@@ -25,7 +25,6 @@ void MelbusController::Task()
         if (accumulated > MELBUS_INIT_TIMEOUT_MS)
         {
             Serial.printf("ERROR: MELBUS init not received in time. Trying reset!\n");
-            // Melbus init has not been received, arduino needs to be reset
             SetEnable(false);
             Reset();
             delay(100);
