@@ -5,8 +5,8 @@
 #include "media_control.h"
 
 #define PROJECT_SOFTWARE_VERSION "release-1.0"
-#define BEGIN_WAIT_TIME_MS 3000
-
+#define BEGIN_WAIT_TIME_MS 5000
+#define A2DP_SINK_NAME "My test sink"
 
 BluetoothA2DPSink f_bluetoothSink;
 MediaControl f_mediaControl;
@@ -17,18 +17,18 @@ static void InitA2DPSink();
 void setup() {
     Serial.begin(115200);
     Serial.printf("Begin init bt receiver ver: %s\n", PROJECT_SOFTWARE_VERSION);
-    Serial.printf("Enabling arduino\n");
 
-    f_melbusController.Init();
-    delay(BEGIN_WAIT_TIME_MS);
-    f_melbusController.SetEnable(true);
+    Serial.printf("Starting bluetooth sink\n");
+    InitA2DPSink();
 
     Serial.printf("Setting up control\n");
     f_mediaControl.SetSink(&f_bluetoothSink);
     f_mediaControl.SetDebug(true);
 
-    Serial.printf("Starting bluetooth sink\n");
-    InitA2DPSink();
+    Serial.printf("Enabling arduino\n");
+    f_melbusController.Init();
+    delay(BEGIN_WAIT_TIME_MS);
+    f_melbusController.SetEnable(true);
 
     Serial.printf("Init Done!\n");
 }
@@ -62,5 +62,5 @@ void InitA2DPSink()
     };
     f_bluetoothSink.set_i2s_config(i2s_config);
 
-    f_bluetoothSink.start("My test sink");
+    f_bluetoothSink.start(A2DP_SINK_NAME);
 }
