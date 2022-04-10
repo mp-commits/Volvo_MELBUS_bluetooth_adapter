@@ -9,14 +9,23 @@
  * 
  */
 
+#ifndef MEDIA_INTERFACE_H
+#define MEDIA_INTERFACE_H
+
 typedef enum {
     MEDIA_PLAY,
     MEDIA_PAUSE,
     MEDIA_NEXT_TRACK,
     MEDIA_PREVIOUS_TRACK,
     MEDIA_RANDOM,
+    MEDIA_VOLUME_UP,
+    MEDIA_VOLUME_DOWN,
     MEDIA_UNKNOWN_COMMAND,
     MEDIA_NO_COMMAND,
+
+    MEDIA_INFO_MELBUS_INIT_BEGIN,
+    MEDIA_INFO_MELBUS_INIT_DONE,
+    MEDIA_INFO_ALIVE,
 } MEDIA_Command_e;
 
 class MediaInterface {
@@ -29,3 +38,5 @@ public:
 
 private:
 };
+
+#endif

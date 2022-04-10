@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "cd_changer.h"
+#include "enable.h"
 
 #define LED_BLINK_COUNT 60000
 #define LED_PIN 13
@@ -15,8 +16,14 @@ void setup() {
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
 
+    ENABLE_Init();
+    ENABLE_WaitForEnable();
+
     Serial.begin(115200);
     CD_CHANGER_Init();
+
+    digitalWrite(LED_PIN, LOW);
+    f_ledOn = false;
 }
 
 void loop() {

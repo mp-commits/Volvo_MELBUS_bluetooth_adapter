@@ -9,7 +9,9 @@
  * 
  */
 
-#pragma once
+#ifndef MELBUS_H
+#define MELBUS_H
+
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -30,3 +32,5 @@ uint32_t MELBUS_RxBytesAvailable(void);
 MELBUS_byte_t MELBUS_ReadByte(void);
 
 bool MELBUS_ConfirmSync(void);
+
+#endif

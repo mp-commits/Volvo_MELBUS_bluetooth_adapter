@@ -14,15 +14,26 @@
 #include <stdint.h>
 
 // Bytes for encoding commands
-#define COM_HEADER  (uint8_t)(0xA0)
-#define COM_UNKNOWN (uint8_t)(0x00)
-#define COM_PLAY    (uint8_t)(0x01)
-#define COM_PAUSE   (uint8_t)(0x02)
-#define COM_NEXT    (uint8_t)(0x03)
-#define COM_PREV    (uint8_t)(0x04)
-#define COM_RANDOM  (uint8_t)(0x05)
+#define COM_HEADER   (uint8_t)(0xA0)
+#define COM_UNKNOWN  (uint8_t)(0x00)
+#define COM_PLAY     (uint8_t)(0x01)
+#define COM_PAUSE    (uint8_t)(0x02)
+#define COM_NEXT     (uint8_t)(0x03)
+#define COM_PREV     (uint8_t)(0x04)
+#define COM_RANDOM   (uint8_t)(0x05)
+#define COM_VOL_UP   (uint8_t)(0x06)
+#define COM_VOL_DOWN (uint8_t)(0x07)
 
+#define COM_INFO_HEADER     (uint8_t)(0xB0)
+#define COM_INFO_UNKNOWN    (uint8_t)(0x00)
+#define COM_INFO_INIT_BEGIN (uint8_t)(0x01)
+#define COM_INFO_INIT_DONE  (uint8_t)(0x02)
+#define COM_INFO_ALIVE      (uint8_t)(0x03)
+
+static uint8_t EncodeInfoMessage(MEDIA_Info_e msg);
 static uint8_t EncodeCommand(MEDIA_Command_e cmd);
+
+static char EncodeDebugInfoMessage(MEDIA_Info_e msg);
 static char EncodeDebugCommand(MEDIA_Command_e cmd);
 
 MediaInterface::MediaInterface()
@@ -35,11 +46,23 @@ MediaInterface::~MediaInterface()
 
 }
 
+void MediaInterface::SendInfoMessage(const MEDIA_Info_e info)
+{
+    if(m_debugMode)
+    {
+        Serial.println(EncodeDebugInfoMessage(info));
+    }
+    else
+    {
+        Serial.write(EncodeInfoMessage(info));
+    }
+}
+
 void MediaInterface::SendCommand(const MEDIA_Command_e command)
 {
     if (m_debugMode)
     {
-        Serial.println(EncodeDebugCommand(command), HEX);
+        Serial.println(EncodeDebugCommand(command));
     }
     else
     {
@@ -73,6 +96,12 @@ uint8_t EncodeCommand(MEDIA_Command_e cmd)
         break;
     case MEDIA_RANDOM:
         commandByte = COM_RANDOM;
+        break;
+    case MEDIA_VOLUME_UP:
+        commandByte = COM_VOL_UP;
+        break;
+    case MEDIA_VOLUME_DOWN:
+        commandByte = COM_VOL_DOWN;
         break;
     default:
         break;
@@ -109,4 +138,51 @@ char EncodeDebugCommand(MEDIA_Command_e cmd)
     }
 
     return commandByte;
+}
+
+uint8_t EncodeInfoMessage(MEDIA_Info_e msg)
+{
+    uint8_t infoByte = COM_INFO_UNKNOWN;
+
+    switch (msg)
+    {
+    case MEDIA_INFO_INIT_BEGIN:
+        infoByte = COM_INFO_INIT_BEGIN;
+        break;
+    case MEDIA_INFO_INIT_DONE:
+        infoByte = COM_INFO_INIT_DONE;
+        break;
+    case MEDIA_INFO_ALIVE:
+        infoByte = COM_INFO_ALIVE;
+        break;
+
+    default:
+        infoByte = COM_INFO_UNKNOWN;
+        break;
+    }
+
+    infoByte = infoByte | COM_INFO_HEADER;
+
+    return infoByte;
+}
+
+char EncodeDebugInfoMessage(MEDIA_Info_e msg)
+{
+    char infoByte = 'u';
+
+    switch (msg)
+    {
+    case MEDIA_INFO_INIT_BEGIN:
+        infoByte = 'i';
+        break;
+    case MEDIA_INFO_INIT_DONE:
+        infoByte = 'd';
+        break;
+
+    default:
+        infoByte = 'u';
+        break;
+    }
+
+    return infoByte;
 }

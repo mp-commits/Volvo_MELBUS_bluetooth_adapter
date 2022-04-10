@@ -12,6 +12,7 @@
 
 MediaControl::MediaControl()
 {
+    m_melbusInitDone = false;
     m_debugEnabled = false;
     m_sink = nullptr;
 }
@@ -26,6 +27,15 @@ MediaControl::~MediaControl()
 
 }
 
+bool MediaControl::IsMelbusInitDone()
+{
+    return m_melbusInitDone;
+}
+
+void MediaControl::ResetMelbusInitDone()
+{
+    m_melbusInitDone = false;
+}
 
 void MediaControl::Task()
 {
@@ -55,6 +65,15 @@ void MediaControl::Task()
             break;
         case MEDIA_PREVIOUS_TRACK:
             m_sink->previous();
+            break;
+        case MEDIA_VOLUME_UP:
+            m_sink->set_volume(m_sink->get_volume()+10);
+            break;
+        case MEDIA_VOLUME_DOWN:
+            m_sink->set_volume(m_sink->get_volume()-10);
+            break;
+        case MEDIA_INFO_MELBUS_INIT_DONE:
+            m_melbusInitDone = true;
             break;
         case MEDIA_RANDOM:
         default:

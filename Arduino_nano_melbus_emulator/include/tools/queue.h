@@ -9,6 +9,9 @@
  * 
  */
 
+#ifndef QUEUE_H
+#define QUEUE_H
+
 #include "melbus.h"
 
 #define QUEUE_SIZE 64
@@ -27,3 +30,5 @@ private:
     uint32_t m_writeIndex;
     uint32_t m_bytesAvailable;
 };
+
+#endif

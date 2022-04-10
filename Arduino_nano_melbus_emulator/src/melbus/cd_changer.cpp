@@ -44,16 +44,19 @@ void CD_CHANGER_Task()
             case MELBUS_MAIN_INIT:
                 f_initBegin = true;
                 f_initDone = false;
+                f_mediaInterface.SendInfoMessage(MEDIA_INFO_INIT_BEGIN);
                 break;
 
             case MELBUS_SECONDARY_INIT:
                 f_initBegin = true;
                 f_initDone = false;
+                f_mediaInterface.SendInfoMessage(MEDIA_INFO_INIT_BEGIN);
                 break;
 
             case MELBUS_CDCHGR_ID_REQ:
                 MELBUS_SendByte(f_cdChangerId);
                 f_initDone = true;
+                f_mediaInterface.SendInfoMessage(MEDIA_INFO_INIT_DONE);
                 break;
 
             case MELBUS_TRACK_INFO_REQ:
@@ -88,23 +91,21 @@ void CD_CHANGER_Task()
                 break;
 
             case MELBUS_TRACK_NEXT:
-                f_trackNumber++;
                 f_mediaInterface.SendCommand(MEDIA_NEXT_TRACK);
                 break;
 
             case MELBUS_TRACK_PREVIOUS:
-                f_trackNumber--;
                 f_mediaInterface.SendCommand(MEDIA_PREVIOUS_TRACK);
                 break;
 
             case MELBUS_DISC_NEXT:
-                f_cdNumber++;
                 f_trackNumber = 1;
+                f_mediaInterface.SendCommand(MEDIA_VOLUME_UP);
                 break;
 
             case MELBUS_DISC_PREVIOUS:
-                f_cdNumber--;
                 f_trackNumber = 1;
+                f_mediaInterface.SendCommand(MEDIA_VOLUME_DOWN);
                 break;
 
             case MELBUS_RANDOM:

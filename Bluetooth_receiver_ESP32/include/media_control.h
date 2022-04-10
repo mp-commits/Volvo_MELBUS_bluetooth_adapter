@@ -9,6 +9,9 @@
  * 
  */
 
+#ifndef MEDIA_CONTROL_H
+#define MEDIA_CONTROL_H
+
 #include "media_interface.h"
 #include "BluetoothA2DPSink.h"
 
@@ -20,8 +23,14 @@ public:
     void SetSink(BluetoothA2DPSink* sink);
     void Task();
     void SetDebug(bool set);
+    bool IsMelbusInitDone();
+    void ResetMelbusInitDone();
+
 private:
     MediaInterface m_interface;
     BluetoothA2DPSink* m_sink;
     bool m_debugEnabled;
+    bool m_melbusInitDone;
 };
+
+#endif

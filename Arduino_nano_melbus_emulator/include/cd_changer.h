@@ -9,6 +9,9 @@
  * 
  */
 
+#ifndef CD_CHANGER_H
+#define CD_CHANGER_H
+
 typedef enum {
     MELBUS_MAIN_INIT,
     MELBUS_SECONDARY_INIT,
@@ -30,3 +33,5 @@ typedef enum {
 void CD_CHANGER_Task();
 
 void CD_CHANGER_Init();
+
+#endif

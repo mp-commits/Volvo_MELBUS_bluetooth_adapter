@@ -9,6 +9,9 @@
  * 
  */
 
+#ifndef HISTORY_H
+#define HISTORY_H
+
 #include "melbus.h"
 
 #define HISTORY_SIZE 8
@@ -24,3 +27,5 @@ public:
 private:
     MELBUS_byte_t m_history[HISTORY_SIZE];
 };
+
+#endif
