@@ -28,6 +28,10 @@ typedef enum {
     MEDIA_INFO_ALIVE,
 } MEDIA_Command_e;
 
+typedef enum {
+    MEDIA_REQUEST_INIT_DONE,
+} MEDIA_Request_e;
+
 class MediaInterface {
 public:
     MediaInterface();
@@ -35,6 +39,7 @@ public:
 
     MEDIA_Command_e TryGetCommand();
     void SerialPrintCommand(MEDIA_Command_e command);
+    void SendRequest(MEDIA_Request_e request);
 
 private:
 };

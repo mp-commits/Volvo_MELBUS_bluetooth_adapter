@@ -18,4 +18,7 @@
 #define DAC_DATA_PIN 25
 #define DAC_WSL_PIN 26
 
+#define MELBUS_INIT_TIMEOUT_MS 10000 // Allow 10 sec for melbus init before reset
+#define MELBUS_STATUS_REQ_INTERVAL_MS 1000
+
 #endif

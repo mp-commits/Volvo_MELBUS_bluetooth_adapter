@@ -124,6 +124,8 @@ void CD_CHANGER_Task()
     if(!MELBUS_ConfirmSync())
     {
     }
+
+    f_mediaInterface.Task();
 }
 
 void CD_CHANGER_Init()

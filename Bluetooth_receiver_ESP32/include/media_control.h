@@ -31,6 +31,7 @@ private:
     BluetoothA2DPSink* m_sink;
     bool m_debugEnabled;
     bool m_melbusInitDone;
+    uint32_t m_requestTime;
 };
 
 #endif

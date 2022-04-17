@@ -10,12 +10,14 @@
  */
 #include "media_control.h"
 #include "Arduino.h"
+#include "project_config.h"
 
 MediaControl::MediaControl()
 {
     m_melbusInitDone = false;
     m_debugEnabled = false;
     m_sink = nullptr;
+    m_requestTime = millis();
 }
 
 void MediaControl::SetSink(BluetoothA2DPSink* sink)
@@ -81,6 +83,16 @@ void MediaControl::Task()
         case MEDIA_RANDOM:
         default:
             break;
+        }
+    }
+
+    uint32_t currentTime = millis();
+    if (currentTime - m_requestTime >= MELBUS_STATUS_REQ_INTERVAL_MS)
+    {
+        m_requestTime = currentTime;
+        if (!m_melbusInitDone)
+        {
+            m_interface.SendRequest(MEDIA_REQUEST_INIT_DONE);
         }
     }
 }

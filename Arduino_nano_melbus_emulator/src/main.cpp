@@ -16,9 +16,6 @@ void setup() {
     pinMode(LED_PIN, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
 
-    ENABLE_Init();
-    ENABLE_WaitForEnable();
-
     Serial.begin(115200);
     CD_CHANGER_Init();
 

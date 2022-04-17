@@ -24,11 +24,15 @@
 #define COM_VOL_UP   (uint8_t)(0x06)
 #define COM_VOL_DOWN (uint8_t)(0x07)
 
-#define COM_INFO_HEADER     (uint8_t)(0xB0)
-#define COM_INFO_UNKNOWN    (uint8_t)(0x00)
-#define COM_INFO_INIT_BEGIN (uint8_t)(0x01)
-#define COM_INFO_INIT_DONE  (uint8_t)(0x02)
-#define COM_INFO_ALIVE      (uint8_t)(0x03)
+#define COM_INFO_HEADER         (uint8_t)(0xB0)
+#define COM_INFO_UNKNOWN        (uint8_t)(0x00)
+#define COM_INFO_INIT_BEGIN     (uint8_t)(0x01)
+#define COM_INFO_INIT_DONE      (uint8_t)(0x02)
+#define COM_INFO_ALIVE          (uint8_t)(0x03)
+#define COM_INFO_INIT_NOT_DONE  (uint8_t)(0x04)
+
+#define COM_REQ_HEADER      (uint8_t)(0xC0)
+#define COM_REQ_INIT_DONE   (uint8_t)(0x01)
 
 static uint8_t EncodeInfoMessage(MEDIA_Info_e msg);
 static uint8_t EncodeCommand(MEDIA_Command_e cmd);
@@ -36,9 +40,12 @@ static uint8_t EncodeCommand(MEDIA_Command_e cmd);
 static char EncodeDebugInfoMessage(MEDIA_Info_e msg);
 static char EncodeDebugCommand(MEDIA_Command_e cmd);
 
+static MEDIA_Request_e DecodeRequest(uint8_t byte);
+
 MediaInterface::MediaInterface()
 {
     m_debugMode = false;
+    m_initDone = false;
 }
 
 MediaInterface::~MediaInterface()
@@ -48,6 +55,11 @@ MediaInterface::~MediaInterface()
 
 void MediaInterface::SendInfoMessage(const MEDIA_Info_e info)
 {
+    if (info == MEDIA_INFO_INIT_DONE)
+    {
+        m_initDone = true;
+    }
+
     if(m_debugMode)
     {
         Serial.println(EncodeDebugInfoMessage(info));
@@ -67,13 +79,41 @@ void MediaInterface::SendCommand(const MEDIA_Command_e command)
     else
     {
         Serial.write(EncodeCommand(command));
-        // Serial.print(EncodeCommand(command));
     }
 }
 
 void MediaInterface::SetDebugPrint(const bool set)
 {
     m_debugMode = set;
+}
+
+void MediaInterface::Task()
+{
+    MEDIA_Request_e request = MEDIA_REQUEST_UNKNOWN;
+    uint8_t rxByte = 0x0;
+    if (Serial.available() > 0)
+    {
+        rxByte = Serial.read();
+        request = DecodeRequest(rxByte);
+    }
+
+    switch (request)
+    {
+    case MEDIA_REQUEST_INIT_DONE:
+        {
+            if (m_initDone)
+            {
+                SendInfoMessage(MEDIA_INFO_INIT_DONE);
+            }
+            else 
+            {
+                SendInfoMessage(MEDIA_INFO_INIT_NOT_DONE);
+            }
+            break;
+        }
+    default:
+        break;
+    }
 }
 
 uint8_t EncodeCommand(MEDIA_Command_e cmd)
@@ -155,7 +195,9 @@ uint8_t EncodeInfoMessage(MEDIA_Info_e msg)
     case MEDIA_INFO_ALIVE:
         infoByte = COM_INFO_ALIVE;
         break;
-
+    case MEDIA_INFO_INIT_NOT_DONE:
+        infoByte = COM_INFO_INIT_NOT_DONE;
+        break;
     default:
         infoByte = COM_INFO_UNKNOWN;
         break;
@@ -185,4 +227,26 @@ char EncodeDebugInfoMessage(MEDIA_Info_e msg)
     }
 
     return infoByte;
+}
+
+MEDIA_Request_e DecodeRequest(uint8_t byte)
+{
+    MEDIA_Request_e request = MEDIA_REQUEST_UNKNOWN;
+
+    if (byte & 0xF0 == COM_REQ_HEADER)
+    {
+        uint8_t command = byte & 0x0F;
+
+        switch (command)
+        {
+        case COM_REQ_INIT_DONE:
+            request = MEDIA_REQUEST_INIT_DONE;
+            break;
+        default:
+            request = MEDIA_REQUEST_UNKNOWN;
+            break;
+        }
+    }
+
+    return request;
 }

@@ -30,8 +30,11 @@
 #define COM_INFO_INIT_DONE  (uint8_t)(0x02)
 #define COM_INFO_ALIVE      (uint8_t)(0x03)
 
+#define COM_REQ_HEADER      (uint8_t)(0xC0)
+#define COM_REQ_INIT_DONE   (uint8_t)(0x01)
 
 static MEDIA_Command_e TryDecodeCommand(const uint8_t byte);
+static uint8_t EncodeRequest(const MEDIA_Request_e request);
 
 MediaInterface::MediaInterface()
 {
@@ -54,6 +57,12 @@ MEDIA_Command_e MediaInterface::TryGetCommand()
     }
 
     return command;
+}
+
+void MediaInterface::SendRequest(MEDIA_Request_e request)
+{
+    uint8_t command = EncodeRequest(request);
+    Serial.write(command);
 }
 
 MEDIA_Command_e TryDecodeCommand(const uint8_t byte)
@@ -166,4 +175,21 @@ void MediaInterface::SerialPrintCommand(MEDIA_Command_e command)
     default:
         break;
     }
+}
+
+uint8_t EncodeRequest(const MEDIA_Request_e request)
+{
+    uint8_t command = COM_REQ_HEADER;
+
+    switch (request)
+    {
+    case MEDIA_REQUEST_INIT_DONE:
+        command |= COM_REQ_INIT_DONE;
+        break;
+    
+    default:
+        break;
+    }
+
+    return command;
 }

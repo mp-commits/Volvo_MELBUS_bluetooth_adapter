@@ -25,8 +25,14 @@ typedef enum {
 typedef enum {
     MEDIA_INFO_INIT_BEGIN,
     MEDIA_INFO_INIT_DONE,
-    MEDIA_INFO_ALIVE
+    MEDIA_INFO_ALIVE,
+    MEDIA_INFO_INIT_NOT_DONE
 } MEDIA_Info_e;
+
+typedef enum {
+    MEDIA_REQUEST_INIT_DONE,
+    MEDIA_REQUEST_UNKNOWN,
+} MEDIA_Request_e;
 
 class MediaInterface {
 public:
@@ -36,9 +42,11 @@ public:
     void SendInfoMessage(const MEDIA_Info_e info);
     void SendCommand(const MEDIA_Command_e command);
     void SetDebugPrint(const bool set);
+    void Task();
 
 private:
     bool m_debugMode;
+    bool m_initDone;
 };
 
 #endif
