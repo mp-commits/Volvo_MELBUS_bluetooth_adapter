@@ -63,4 +63,5 @@ void InitA2DPSink()
     f_bluetoothSink.set_i2s_config(i2s_config);
 
     f_bluetoothSink.start(A2DP_SINK_NAME);
+    f_bluetoothSink.set_volume(100);
 }
