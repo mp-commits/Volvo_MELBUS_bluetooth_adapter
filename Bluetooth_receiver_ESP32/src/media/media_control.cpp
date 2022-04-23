@@ -78,6 +78,12 @@ void MediaControl::Task()
         case MEDIA_INFO_MELBUS_INIT_DONE:
             m_melbusInitDone = true;
             break;
+        case MEDIA_FAST_FORWARD:
+            m_sink->fast_forward();
+            break;
+        case MEDIA_FAST_REVERSE:
+            m_sink->rewind();
+            break;
         case MEDIA_RANDOM:
         default:
             break;
