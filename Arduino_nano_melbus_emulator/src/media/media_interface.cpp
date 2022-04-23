@@ -14,15 +14,18 @@
 #include <stdint.h>
 
 // Bytes for encoding commands
-#define COM_HEADER   (uint8_t)(0xA0)
-#define COM_UNKNOWN  (uint8_t)(0x00)
-#define COM_PLAY     (uint8_t)(0x01)
-#define COM_PAUSE    (uint8_t)(0x02)
-#define COM_NEXT     (uint8_t)(0x03)
-#define COM_PREV     (uint8_t)(0x04)
-#define COM_RANDOM   (uint8_t)(0x05)
-#define COM_VOL_UP   (uint8_t)(0x06)
-#define COM_VOL_DOWN (uint8_t)(0x07)
+#define COM_HEADER          (uint8_t)(0xA0)
+#define COM_UNKNOWN         (uint8_t)(0x00)
+#define COM_PLAY            (uint8_t)(0x01)
+#define COM_PAUSE           (uint8_t)(0x02)
+#define COM_NEXT            (uint8_t)(0x03)
+#define COM_PREV            (uint8_t)(0x04)
+#define COM_RANDOM          (uint8_t)(0x05)
+#define COM_VOL_UP          (uint8_t)(0x06)
+#define COM_VOL_DOWN        (uint8_t)(0x07)
+#define COM_FAST_FORWARD    (uint8_t)(0x08)
+#define COM_FAST_REVERSE    (uint8_t)(0x09)
+#define COM_SCAN_MODE       (uint8_t)(0x0A)
 
 #define COM_INFO_HEADER     (uint8_t)(0xB0)
 #define COM_INFO_UNKNOWN    (uint8_t)(0x00)
@@ -36,9 +39,9 @@ static uint8_t EncodeCommand(MEDIA_Command_e cmd);
 static char EncodeDebugInfoMessage(MEDIA_Info_e msg);
 static char EncodeDebugCommand(MEDIA_Command_e cmd);
 
-MediaInterface::MediaInterface()
+MediaInterface::MediaInterface(): m_debugMode(false)
 {
-    m_debugMode = false;
+    
 }
 
 MediaInterface::~MediaInterface()
@@ -67,7 +70,6 @@ void MediaInterface::SendCommand(const MEDIA_Command_e command)
     else
     {
         Serial.write(EncodeCommand(command));
-        // Serial.print(EncodeCommand(command));
     }
 }
 
@@ -103,6 +105,14 @@ uint8_t EncodeCommand(MEDIA_Command_e cmd)
     case MEDIA_VOLUME_DOWN:
         commandByte = COM_VOL_DOWN;
         break;
+    case MEDIA_FAST_FORWARD:
+        commandByte = COM_FAST_FORWARD;
+        break;
+    case MEDIA_FAST_REVERSE:
+        commandByte = COM_FAST_REVERSE;
+        break;
+    case MEDIA_SCAN_MODE:
+        commandByte = COM_SCAN_MODE;
     default:
         break;
     }
