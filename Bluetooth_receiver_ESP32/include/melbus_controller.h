@@ -16,7 +16,7 @@
 #include "media_control.h"
 #include "Arduino.h"
 
-#define MELBUS_INIT_TIMEOUT_MS 10000 // Allow 10 sec for melbus init before reset
+#define MELBUS_INIT_TIMEOUT_MS 5000 // Allow 5 sec for melbus init before reset
 
 class MelbusController
 {

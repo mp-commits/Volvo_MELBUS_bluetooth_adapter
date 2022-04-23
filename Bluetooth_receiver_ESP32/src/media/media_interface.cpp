@@ -14,15 +14,18 @@
 #include <stdint.h>
 
 // Bytes for decoding commands
-#define COM_HEADER   (uint8_t)(0xA0)
-#define COM_UNKNOWN  (uint8_t)(0x00)
-#define COM_PLAY     (uint8_t)(0x01)
-#define COM_PAUSE    (uint8_t)(0x02)
-#define COM_NEXT     (uint8_t)(0x03)
-#define COM_PREV     (uint8_t)(0x04)
-#define COM_RANDOM   (uint8_t)(0x05)
-#define COM_VOL_UP   (uint8_t)(0x06)
-#define COM_VOL_DOWN (uint8_t)(0x07)
+#define COM_HEADER          (uint8_t)(0xA0)
+#define COM_UNKNOWN         (uint8_t)(0x00)
+#define COM_PLAY            (uint8_t)(0x01)
+#define COM_PAUSE           (uint8_t)(0x02)
+#define COM_NEXT            (uint8_t)(0x03)
+#define COM_PREV            (uint8_t)(0x04)
+#define COM_RANDOM          (uint8_t)(0x05)
+#define COM_VOL_UP          (uint8_t)(0x06)
+#define COM_VOL_DOWN        (uint8_t)(0x07)
+#define COM_FAST_FORWARD    (uint8_t)(0x08)
+#define COM_FAST_REVERSE    (uint8_t)(0x09)
+#define COM_SCAN_MODE       (uint8_t)(0x0A)
 
 #define COM_INFO_HEADER     (uint8_t)(0xB0)
 #define COM_INFO_UNKNOWN    (uint8_t)(0x00)
@@ -90,6 +93,16 @@ MEDIA_Command_e TryDecodeCommand(const uint8_t byte)
         case COM_VOL_DOWN:
             command = MEDIA_VOLUME_DOWN;
             break;
+        case COM_FAST_FORWARD:
+            command = MEDIA_FAST_FORWARD;
+            break;
+        case COM_FAST_REVERSE:
+            command = MEDIA_FAST_REVERSE;
+            break;
+        case COM_SCAN_MODE:
+            command = MEDIA_SCAN_MODE;
+            break;
+
         default:
             command = MEDIA_UNKNOWN_COMMAND;
             break;
@@ -145,11 +158,20 @@ void MediaInterface::SerialPrintCommand(MEDIA_Command_e command)
     case MEDIA_RANDOM:
         Serial.println("Mcmd: Random");
         break;
+    case MEDIA_SCAN_MODE:
+        Serial.println("Mcmd: Scan");
+        break;
     case MEDIA_VOLUME_UP:
         Serial.println("Mcmd: vol+");
         break;
     case MEDIA_VOLUME_DOWN:
         Serial.println("Mcmd: vol-");
+        break;
+    case MEDIA_FAST_FORWARD:
+        Serial.println("Mcmd: FF");
+        break;
+    case MEDIA_FAST_REVERSE:
+        Serial.println("Mcmd: FR");
         break;
     case MEDIA_UNKNOWN_COMMAND:
         Serial.println("Mcmd: Unknown");

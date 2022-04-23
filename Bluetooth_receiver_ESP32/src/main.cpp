@@ -5,8 +5,8 @@
 #include "media_control.h"
 
 #define PROJECT_SOFTWARE_VERSION "release-1.0"
-#define BEGIN_WAIT_TIME_MS 5000
-#define A2DP_SINK_NAME "My test sink"
+#define BEGIN_WAIT_TIME_MS 2500
+#define A2DP_SINK_NAME "My S80"
 
 BluetoothA2DPSink f_bluetoothSink;
 MediaControl f_mediaControl;

@@ -18,8 +18,11 @@ typedef enum {
     MEDIA_NEXT_TRACK,
     MEDIA_PREVIOUS_TRACK,
     MEDIA_RANDOM,
+    MEDIA_SCAN_MODE,
     MEDIA_VOLUME_UP,
     MEDIA_VOLUME_DOWN,
+    MEDIA_FAST_FORWARD,
+    MEDIA_FAST_REVERSE,
 } MEDIA_Command_e;
 
 typedef enum {

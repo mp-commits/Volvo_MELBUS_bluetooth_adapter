@@ -109,12 +109,25 @@ void CD_CHANGER_Task()
                 break;
 
             case MELBUS_RANDOM:
+                MELBUS_SendByte(0x00);
                 f_mediaInterface.SendCommand(MEDIA_RANDOM);
                 break;
 
             case MELBUS_FAST_FORWARD:
+                MELBUS_SendByte(0x00);
+                f_mediaInterface.SendCommand(MEDIA_FAST_FORWARD);
                 break;
-
+            
+            case MELBUS_FAST_REVERSE:
+                MELBUS_SendByte(0x00);
+                f_mediaInterface.SendCommand(MEDIA_FAST_REVERSE);
+                break;
+            
+            case MELBUS_SCAN_MODE:
+                MELBUS_SendByte(0x00);
+                f_mediaInterface.SendCommand(MEDIA_SCAN_MODE);
+                break;
+                
             case MELBUS_UNKNOWN_COMMAND:
             default:
                 break;
@@ -188,9 +201,17 @@ MELBUS_command_t TryResolveCommand()
     {
         return MELBUS_RANDOM;
     }
+    if((HST(2) == 0xE8 || HST(2) == 0xE9) && (HST(1) == 0x19 || HST(1) == 0x49) && HST(0) == 0x2E)
+    {
+        return MELBUS_SCAN_MODE;
+    }
     if((HST(2) == 0xE8 || HST(2) == 0xE9) && (HST(1) == 0x19 || HST(1) == 0x49) && HST(0) == 0x29)
     {
         return MELBUS_FAST_FORWARD;
+    }
+    if((HST(2) == 0xE8 || HST(2) == 0xE9) && (HST(1) == 0x19 || HST(1) == 0x46) && HST(0) == 0x26)
+    {
+        return MELBUS_FAST_REVERSE;
     }
 
     return MELBUS_UNKNOWN_COMMAND;
