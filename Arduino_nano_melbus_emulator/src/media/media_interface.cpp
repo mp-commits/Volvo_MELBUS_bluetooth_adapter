@@ -21,8 +21,8 @@
 #define COM_NEXT            (uint8_t)(0x03)
 #define COM_PREV            (uint8_t)(0x04)
 #define COM_RANDOM          (uint8_t)(0x05)
-#define COM_VOL_UP          (uint8_t)(0x06)
-#define COM_VOL_DOWN        (uint8_t)(0x07)
+#define COM_NEXT_DISC          (uint8_t)(0x06)
+#define COM_PREVIOUS_DISC        (uint8_t)(0x07)
 #define COM_FAST_FORWARD    (uint8_t)(0x08)
 #define COM_FAST_REVERSE    (uint8_t)(0x09)
 #define COM_SCAN_MODE       (uint8_t)(0x0A)
@@ -99,11 +99,11 @@ uint8_t EncodeCommand(MEDIA_Command_e cmd)
     case MEDIA_RANDOM:
         commandByte = COM_RANDOM;
         break;
-    case MEDIA_VOLUME_UP:
-        commandByte = COM_VOL_UP;
+    case MEDIA_NEXT_DISC:
+        commandByte = COM_NEXT_DISC;
         break;
-    case MEDIA_VOLUME_DOWN:
-        commandByte = COM_VOL_DOWN;
+    case MEDIA_PREVIOUS_DISC:
+        commandByte = COM_PREVIOUS_DISC;
         break;
     case MEDIA_FAST_FORWARD:
         commandByte = COM_FAST_FORWARD;
