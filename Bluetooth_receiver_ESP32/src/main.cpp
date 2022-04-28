@@ -4,9 +4,9 @@
 #include "melbus_controller.h"
 #include "media_control.h"
 
-#define PROJECT_SOFTWARE_VERSION "release-1.0"
+#define PROJECT_SOFTWARE_VERSION "proto-1.1"
 #define BEGIN_WAIT_TIME_MS 2500
-#define A2DP_SINK_NAME "My S80"
+#define A2DP_SINK_NAME "My Dev Sink"
 
 BluetoothA2DPSink f_bluetoothSink;
 MediaControl f_mediaControl;
@@ -15,7 +15,7 @@ MelbusController f_melbusController(&f_mediaControl);
 static void InitA2DPSink();
 
 void setup() {
-    Serial.begin(115200);
+    Serial.begin(230400);
     Serial.printf("Begin init bt receiver ver: %s\n", PROJECT_SOFTWARE_VERSION);
 
     Serial.printf("Starting bluetooth sink\n");
