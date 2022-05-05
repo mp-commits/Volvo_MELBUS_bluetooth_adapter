@@ -40,6 +40,7 @@ static MEDIA_Info_e f_info;
 
 void melbus_Init_CDCHRG();
 void MELBUS_CLOCK_INTERRUPT();
+uint8_t FixTrackNumber(uint8_t number);
 
 void FASTMELBUS_Init(void)
 {
@@ -63,18 +64,34 @@ void FASTMELBUS_Task(void)
         melbus_DiscCnt=0;
         DDRD &= ~(1<<MELBUS_DATA);
         PORTD |= (1<<MELBUS_DATA);
+
+        if (f_command != MEDIA_NO_COMMAND)
+        {
+            f_interface.SendCommand(f_command);
+            f_command = MEDIA_NO_COMMAND;
+        }
+        if (f_info != MEDIA_INFO_NO_INFO)
+        {
+            f_interface.SendInfoMessage(f_info);
+            f_info = MEDIA_INFO_NO_INFO;
+        }
+
+        switch (f_interface.TryGetData())
+        {
+        case MEDIA_DATA_NO_DATA:
+            break;
+        case MEDIA_DATA_DISC_NUMBER:
+            // melbus_SendBuffer[3] = FixTrackNumber(f_interface.GetDiscNumber());
+            break;
+        case MEDIA_DATA_TRACK_NUMBER:
+            melbus_SendBuffer[5] = FixTrackNumber(f_interface.GetTrackNumber());
+            break;
+        
+        default:
+            break;
+        }
     }  
 
-    if (f_command != MEDIA_NO_COMMAND)
-    {
-        f_interface.SendCommand(f_command);
-        f_command = MEDIA_NO_COMMAND;
-    }
-    if (f_info != MEDIA_INFO_NO_INFO)
-    {
-        f_interface.SendInfoMessage(f_info);
-        f_info = MEDIA_INFO_NO_INFO;
-    }
 
     if ((melbus_Bitposition == 0x80) && (PIND & (1<<MELBUS_CLOCKBIT)))
     {
@@ -204,13 +221,11 @@ void MELBUS_CLOCK_INTERRUPT() {
         else if((melbus_LastReadByte[3] == 0xE8 || melbus_LastReadByte[3] == 0xE9) && (melbus_LastReadByte[2] == 0x1A || melbus_LastReadByte[2] == 0x4A) && melbus_LastReadByte[1] == 0x50 && melbus_LastReadByte[0] == 0x01)
         {
         // D-
-            melbus_SendBuffer[5]=0x01;
             f_command = MEDIA_PREVIOUS_DISC;
         }
         else if((melbus_LastReadByte[3] == 0xE8 || melbus_LastReadByte[3] == 0xE9) && (melbus_LastReadByte[2] == 0x1A || melbus_LastReadByte[2] == 0x4A) && melbus_LastReadByte[1] == 0x50 && melbus_LastReadByte[0] == 0x41)
         {
         // D+
-            melbus_SendBuffer[5]=0x01;
             f_command = MEDIA_NEXT_DISC;
         }
         else if((melbus_LastReadByte[4] == 0xE8 || melbus_LastReadByte[4] == 0xE9) && (melbus_LastReadByte[3] == 0x1B || melbus_LastReadByte[3] == 0x4B) && melbus_LastReadByte[2] == 0x2D && melbus_LastReadByte[1] == 0x00 && melbus_LastReadByte[0] == 0x01)
@@ -240,3 +255,25 @@ void MELBUS_CLOCK_INTERRUPT() {
         EIFR |= (1 << INTF0);
 }
 
+uint8_t FixTrackNumber(uint8_t number)
+{
+    //cut out A-F in each nibble, and skip "00"
+    uint8_t hn = number >> 4;
+    uint8_t ln = number & 0xF;
+    if (ln == 0xA) {
+        ln = 0;
+        hn += 1;
+    }
+    if (ln == 0xF) {
+        ln = 9;
+    }
+    if (hn == 0xA) {
+        hn = 0;
+        ln = 1;
+    }
+    if ((hn == 0) && (ln == 0)) {
+        ln = 0x9;
+        hn = 0x9;
+    }
+    return ((hn << 4) + ln);    
+}

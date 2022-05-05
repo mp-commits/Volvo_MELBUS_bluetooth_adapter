@@ -12,6 +12,8 @@
 #ifndef MEDIA_INTERFACE_H
 #define MEDIA_INTERFACE_H
 
+#include "stdint.h"
+
 typedef enum {
     MEDIA_PLAY,
     MEDIA_PAUSE,
@@ -38,6 +40,9 @@ public:
 
     MEDIA_Command_e TryGetCommand();
     void SerialPrintCommand(MEDIA_Command_e command);
+
+    static void SendTrackNumber(uint8_t track);
+    static void SendDiscNumber(uint8_t disc);
 
 private:
 };

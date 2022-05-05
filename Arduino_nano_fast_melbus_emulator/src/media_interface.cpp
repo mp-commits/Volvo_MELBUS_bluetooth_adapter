@@ -33,13 +33,16 @@
 #define COM_INFO_INIT_DONE  (uint8_t)(0x02)
 #define COM_INFO_ALIVE      (uint8_t)(0x03)
 
+#define COM_DATA_TRACK      (uint8_t)(0xAB)
+#define COM_DATA_DISC       (uint8_t)(0xC0)
+
 static uint8_t EncodeInfoMessage(MEDIA_Info_e msg);
 static uint8_t EncodeCommand(MEDIA_Command_e cmd);
 
 static char EncodeDebugInfoMessage(MEDIA_Info_e msg);
 static char EncodeDebugCommand(MEDIA_Command_e cmd);
 
-MediaInterface::MediaInterface(): m_debugMode(false)
+MediaInterface::MediaInterface(): m_debugMode(false), m_disc(0), m_track(0)
 {
     
 }
@@ -76,6 +79,39 @@ void MediaInterface::SendCommand(const MEDIA_Command_e command)
 void MediaInterface::SetDebugPrint(const bool set)
 {
     m_debugMode = set;
+}
+
+MEDIA_Data_e MediaInterface::TryGetData()
+{
+    MEDIA_Data_e result = MEDIA_DATA_NO_DATA;
+
+    if(Serial.available())
+    {
+        m_rxHistory.Append(Serial.read());
+
+        if (m_rxHistory.GetByteAt(1) == COM_DATA_DISC)
+        {
+            m_disc = m_rxHistory.GetByteAt(0);
+            result = MEDIA_DATA_DISC_NUMBER;
+        }
+        if (m_rxHistory.GetByteAt(1) == COM_DATA_TRACK)
+        {
+            m_track = m_rxHistory.GetByteAt(0);
+            result = MEDIA_DATA_TRACK_NUMBER;
+        }
+    }
+
+    return result;
+}
+
+uint8_t MediaInterface::GetDiscNumber()
+{
+    return m_disc;
+}
+
+uint8_t MediaInterface::GetTrackNumber()
+{
+    return m_track;
 }
 
 uint8_t EncodeCommand(MEDIA_Command_e cmd)

@@ -12,6 +12,9 @@
 #ifndef MEDIA_INTERFACE_H
 #define MEDIA_INTERFACE_H
 
+#include "stdint.h"
+#include "history.h"
+
 typedef enum {
     MEDIA_PLAY,
     MEDIA_PAUSE,
@@ -26,6 +29,12 @@ typedef enum {
 
     MEDIA_NO_COMMAND,
 } MEDIA_Command_e;
+
+typedef enum {
+    MEDIA_DATA_NO_DATA,
+    MEDIA_DATA_DISC_NUMBER,
+    MEDIA_DATA_TRACK_NUMBER,
+} MEDIA_Data_e;
 
 typedef enum {
     MEDIA_INFO_INIT_BEGIN,
@@ -44,8 +53,16 @@ public:
     void SendCommand(const MEDIA_Command_e command);
     void SetDebugPrint(const bool set);
 
+    MEDIA_Data_e TryGetData();
+
+    uint8_t GetDiscNumber();
+    uint8_t GetTrackNumber();
+
 private:
     bool m_debugMode;
+    uint8_t m_track;
+    uint8_t m_disc;
+    ByteHistory m_rxHistory;
 };
 
 #endif
