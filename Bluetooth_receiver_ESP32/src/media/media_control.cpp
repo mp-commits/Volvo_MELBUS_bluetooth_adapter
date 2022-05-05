@@ -85,6 +85,7 @@ void MediaControl::Task()
             m_sink->rewind();
             break;
         case MEDIA_RANDOM:
+            RandomNextTrack();
         default:
             break;
         }
@@ -94,4 +95,14 @@ void MediaControl::Task()
 void MediaControl::SetDebug(bool set)
 {
     m_debugEnabled = set;
+}
+
+void MediaControl::RandomNextTrack()
+{
+    const uint32_t timeStamp = millis();
+    const uint32_t skipCount = timeStamp % 7;
+    for(uint32_t i = 0; i < skipCount; i++)
+    {
+        m_sink->next();
+    }
 }

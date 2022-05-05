@@ -25,6 +25,7 @@ public:
     void SetDebug(bool set);
     bool IsMelbusInitDone();
     void ResetMelbusInitDone();
+    void RandomNextTrack();
 
 private:
     MediaInterface m_interface;
