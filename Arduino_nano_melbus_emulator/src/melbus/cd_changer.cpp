@@ -100,12 +100,12 @@ void CD_CHANGER_Task()
 
             case MELBUS_DISC_NEXT:
                 f_trackNumber = 1;
-                f_mediaInterface.SendCommand(MEDIA_VOLUME_UP);
+                f_mediaInterface.SendCommand(MEDIA_NEXT_DISC);
                 break;
 
             case MELBUS_DISC_PREVIOUS:
                 f_trackNumber = 1;
-                f_mediaInterface.SendCommand(MEDIA_VOLUME_DOWN);
+                f_mediaInterface.SendCommand(MEDIA_PREVIOUS_DISC);
                 break;
 
             case MELBUS_RANDOM:

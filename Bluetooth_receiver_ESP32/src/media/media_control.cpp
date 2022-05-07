@@ -67,11 +67,11 @@ void MediaControl::Task()
         case MEDIA_PREVIOUS_TRACK:
             m_sink->previous();
             break;
-        case MEDIA_VOLUME_UP:
+        case MEDIA_NEXT_DISC:
             m_sink->set_volume(m_sink->get_volume()+10);
             Serial.printf("DAC Vol set to %i\n", m_sink->get_volume());
             break;
-        case MEDIA_VOLUME_DOWN:
+        case MEDIA_PREVIOUS_DISC:
             m_sink->set_volume(m_sink->get_volume()-10);
             Serial.printf("DAC Vol set to %i\n", m_sink->get_volume());
             break;
