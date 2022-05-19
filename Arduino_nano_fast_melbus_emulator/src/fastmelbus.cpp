@@ -75,21 +75,6 @@ void FASTMELBUS_Task(void)
             f_interface.SendInfoMessage(f_info);
             f_info = MEDIA_INFO_NO_INFO;
         }
-
-        switch (f_interface.TryGetData())
-        {
-        case MEDIA_DATA_NO_DATA:
-            break;
-        case MEDIA_DATA_DISC_NUMBER:
-            // melbus_SendBuffer[3] = FixTrackNumber(f_interface.GetDiscNumber());
-            break;
-        case MEDIA_DATA_TRACK_NUMBER:
-            melbus_SendBuffer[5] = FixTrackNumber(f_interface.GetTrackNumber());
-            break;
-        
-        default:
-            break;
-        }
     }  
 
 

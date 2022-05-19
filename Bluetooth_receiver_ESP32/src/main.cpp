@@ -9,9 +9,9 @@
 
 bool DEV_PRINT_ENABLED = false;
 
-#define PROJECT_SOFTWARE_VERSION "proto-1.1"
+#define PROJECT_SOFTWARE_VERSION "release-1.1"
 #define BEGIN_WAIT_TIME_MS 2500
-#define A2DP_SINK_NAME "My Dev Sink"
+#define A2DP_SINK_NAME "My S80"
 
 BluetoothA2DPSink f_bluetoothSink;
 MediaControl f_mediaControl;
@@ -96,7 +96,6 @@ void AVRCPMetaDataCallback(uint8_t mask, const uint8_t* buffer)
         {
             PRINT("AVRCP track: ");
             uint8_t track = bufferString.toInt();
-            MediaInterface::SendTrackNumber(track);
             PRINTF1("track: %i\n", track);
             break;
         }
@@ -105,7 +104,6 @@ void AVRCPMetaDataCallback(uint8_t mask, const uint8_t* buffer)
         {
             PRINT("AVRCP tracks total: ");
             uint8_t disc = bufferString.toInt();
-            MediaInterface::SendDiscNumber(disc);
             PRINTF1("disc: %i\n", disc);
             break;
         }
