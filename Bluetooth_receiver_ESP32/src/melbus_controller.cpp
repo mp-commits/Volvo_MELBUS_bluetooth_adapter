@@ -1,5 +1,6 @@
 #include "melbus_controller.h"
 #include "Arduino.h"
+#include "dev_print.h"
 
 MelbusController::MelbusController(MediaControl* control)
 {
@@ -24,7 +25,7 @@ void MelbusController::Task()
         uint32_t accumulated = time - m_initBeginTime_ms;
         if (accumulated > MELBUS_INIT_TIMEOUT_MS)
         {
-            Serial.printf("ERROR: MELBUS init not received in time. Trying reset!\n");
+            PRINT("ERROR: MELBUS init not received in time. Trying reset!\n");
             SetEnable(false);
             Reset();
             delay(100);

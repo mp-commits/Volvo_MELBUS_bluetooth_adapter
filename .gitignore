@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+
+/Arduino_melbus_sniffer/.pio/build/nanoatmega328/firmware.elf
+/Arduino_melbus_sniffer/.pio/build/nanoatmega328/.sconsign39.dblite
+/Arduino_melbus_sniffer/.pio/build/nanoatmega328/firmware.hex
+/Arduino_melbus_sniffer/.pio/build/nanoatmega328/idedata.json

@@ -12,6 +12,7 @@
 #include "media_interface.h"
 #include "Arduino.h"
 #include <stdint.h>
+#include "dev_print.h"
 
 // Bytes for decoding commands
 #define COM_HEADER          (uint8_t)(0xA0)
@@ -33,6 +34,8 @@
 #define COM_INFO_INIT_DONE  (uint8_t)(0x02)
 #define COM_INFO_ALIVE      (uint8_t)(0x03)
 
+#define COM_DATA_TRACK      (uint8_t)(0xAB)
+#define COM_DATA_DISC       (uint8_t)(0xC0)
 
 static MEDIA_Command_e TryDecodeCommand(const uint8_t byte);
 
@@ -57,6 +60,18 @@ MEDIA_Command_e MediaInterface::TryGetCommand()
     }
 
     return command;
+}
+
+void MediaInterface::SendTrackNumber(uint8_t track)
+{
+    uint8_t sendBuffer[2] = {COM_DATA_TRACK, track};
+    Serial.write(sendBuffer, 2);
+}
+
+void MediaInterface::SendDiscNumber(uint8_t disc)
+{
+    uint8_t sendBuffer[2] = {COM_DATA_DISC, disc};
+    Serial.write(sendBuffer, 2);
 }
 
 MEDIA_Command_e TryDecodeCommand(const uint8_t byte)
@@ -144,47 +159,47 @@ void MediaInterface::SerialPrintCommand(MEDIA_Command_e command)
     switch (command)
     {
     case MEDIA_PLAY:
-        Serial.println("Mcmd: Play");
+        PRINTLN("Mcmd: Play");
         break;
     case MEDIA_PAUSE:
-        Serial.println("Mcmd: Pause");
+        PRINTLN("Mcmd: Pause");
         break;
     case MEDIA_NEXT_TRACK:
-        Serial.println("Mcmd: Next");
+        PRINTLN("Mcmd: Next");
         break;
     case MEDIA_PREVIOUS_TRACK:
-        Serial.println("Mcmd: Prev");
+        PRINTLN("Mcmd: Prev");
         break;
     case MEDIA_RANDOM:
-        Serial.println("Mcmd: Random");
+        PRINTLN("Mcmd: Random");
         break;
     case MEDIA_SCAN_MODE:
-        Serial.println("Mcmd: Scan");
+        PRINTLN("Mcmd: Scan");
         break;
     case MEDIA_NEXT_DISC:
-        Serial.println("Mcmd: vol+");
+        PRINTLN("Mcmd: vol+");
         break;
     case MEDIA_PREVIOUS_DISC:
-        Serial.println("Mcmd: vol-");
+        PRINTLN("Mcmd: vol-");
         break;
     case MEDIA_FAST_FORWARD:
-        Serial.println("Mcmd: FF");
+        PRINTLN("Mcmd: FF");
         break;
     case MEDIA_FAST_REVERSE:
-        Serial.println("Mcmd: FR");
+        PRINTLN("Mcmd: FR");
         break;
     case MEDIA_UNKNOWN_COMMAND:
-        Serial.println("Mcmd: Unknown");
+        PRINTLN("Mcmd: Unknown");
         break;
     case MEDIA_INFO_MELBUS_INIT_BEGIN:
-        Serial.println("Minfo: MELBUS init begin");
+        PRINTLN("Minfo: MELBUS init begin");
         break;
     case MEDIA_INFO_MELBUS_INIT_DONE:
-        Serial.println("Minfo: MELBUS init done");
+        PRINTLN("Minfo: MELBUS init done");
         break;
     case MEDIA_INFO_ALIVE:
         static uint32_t aliveCounter = 0;
-        Serial.printf("Minfo: MELBUS alive, %i\n", aliveCounter++);
+        PRINTF1("Minfo: MELBUS alive, %i\n", aliveCounter++);
     default:
         break;
     }

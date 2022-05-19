@@ -3,8 +3,13 @@
 #include "BluetoothA2DPSink.h"
 #include "melbus_controller.h"
 #include "media_control.h"
+#include "dev_print.h"
+#include "media_interface.h"
+#include "string.h"
 
-#define PROJECT_SOFTWARE_VERSION "release-1.0"
+bool DEV_PRINT_ENABLED = false;
+
+#define PROJECT_SOFTWARE_VERSION "release-1.1"
 #define BEGIN_WAIT_TIME_MS 2500
 #define A2DP_SINK_NAME "My S80"
 
@@ -14,23 +19,25 @@ MelbusController f_melbusController(&f_mediaControl);
 
 static void InitA2DPSink();
 
-void setup() {
-    Serial.begin(115200);
-    Serial.printf("Begin init bt receiver ver: %s\n", PROJECT_SOFTWARE_VERSION);
+static void AVRCPMetaDataCallback(uint8_t count, const uint8_t* buffer);
 
-    Serial.printf("Starting bluetooth sink\n");
+void setup() {
+    Serial.begin(230400);
+    PRINTF1("Begin init bt receiver ver: %s\n", PROJECT_SOFTWARE_VERSION);
+
+    PRINT("Starting bluetooth sink\n");
     InitA2DPSink();
 
-    Serial.printf("Setting up control\n");
+    PRINT("Setting up control\n");
     f_mediaControl.SetSink(&f_bluetoothSink);
     f_mediaControl.SetDebug(true);
 
-    Serial.printf("Enabling arduino\n");
+    PRINT("Enabling arduino\n");
     f_melbusController.Init();
     delay(BEGIN_WAIT_TIME_MS);
     f_melbusController.SetEnable(true);
 
-    Serial.printf("Init Done!\n");
+    PRINT("Init Done!\n");
 }
 
 void loop() {
@@ -64,4 +71,45 @@ void InitA2DPSink()
 
     f_bluetoothSink.start(A2DP_SINK_NAME);
     f_bluetoothSink.set_volume(100);
+    f_bluetoothSink.set_avrc_metadata_callback(AVRCPMetaDataCallback);
+    f_bluetoothSink.set_avrc_metadata_attribute_mask(ESP_AVRC_MD_ATTR_ARTIST |
+                                                        ESP_AVRC_MD_ATTR_TITLE |
+                                                        ESP_AVRC_MD_ATTR_TRACK_NUM |
+                                                        ESP_AVRC_MD_ATTR_NUM_TRACKS);
+}
+
+void AVRCPMetaDataCallback(uint8_t mask, const uint8_t* buffer)
+{
+    String bufferString = String((const char*)buffer);
+
+    switch (mask)
+    {
+    case ESP_AVRC_MD_ATTR_ARTIST:
+        PRINT("AVRCP artist: ");
+        break;
+
+    case ESP_AVRC_MD_ATTR_TITLE:
+        PRINT("AVRCP title: ");
+        break;
+
+    case ESP_AVRC_MD_ATTR_TRACK_NUM:
+        {
+            PRINT("AVRCP track: ");
+            uint8_t track = bufferString.toInt();
+            PRINTF1("track: %i\n", track);
+            break;
+        }
+
+    case ESP_AVRC_MD_ATTR_NUM_TRACKS:
+        {
+            PRINT("AVRCP tracks total: ");
+            uint8_t disc = bufferString.toInt();
+            PRINTF1("disc: %i\n", disc);
+            break;
+        }
+    
+    default:
+        break;
+    }
+    PRINTLN((const char*)buffer);
 }

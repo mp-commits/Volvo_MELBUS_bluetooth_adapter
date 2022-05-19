@@ -13,6 +13,7 @@
 #define MEDIA_INTERFACE_H
 
 #include "stdint.h"
+#include "history.h"
 
 typedef enum {
     MEDIA_PLAY,
@@ -25,26 +26,43 @@ typedef enum {
     MEDIA_PREVIOUS_DISC,
     MEDIA_FAST_FORWARD,
     MEDIA_FAST_REVERSE,
-    MEDIA_UNKNOWN_COMMAND,
-    MEDIA_NO_COMMAND,
 
-    MEDIA_INFO_MELBUS_INIT_BEGIN,
-    MEDIA_INFO_MELBUS_INIT_DONE,
-    MEDIA_INFO_ALIVE,
+    MEDIA_NO_COMMAND,
 } MEDIA_Command_e;
+
+typedef enum {
+    MEDIA_DATA_NO_DATA,
+    MEDIA_DATA_DISC_NUMBER,
+    MEDIA_DATA_TRACK_NUMBER,
+} MEDIA_Data_e;
+
+typedef enum {
+    MEDIA_INFO_INIT_BEGIN,
+    MEDIA_INFO_INIT_DONE,
+    MEDIA_INFO_ALIVE,
+
+    MEDIA_INFO_NO_INFO,
+} MEDIA_Info_e;
 
 class MediaInterface {
 public:
     MediaInterface();
     ~MediaInterface();
 
-    MEDIA_Command_e TryGetCommand();
-    void SerialPrintCommand(MEDIA_Command_e command);
+    void SendInfoMessage(const MEDIA_Info_e info);
+    void SendCommand(const MEDIA_Command_e command);
+    void SetDebugPrint(const bool set);
 
-    static void SendTrackNumber(uint8_t track);
-    static void SendDiscNumber(uint8_t disc);
+    MEDIA_Data_e TryGetData();
+
+    uint8_t GetDiscNumber();
+    uint8_t GetTrackNumber();
 
 private:
+    bool m_debugMode;
+    uint8_t m_track;
+    uint8_t m_disc;
+    ByteHistory m_rxHistory;
 };
 
 #endif
